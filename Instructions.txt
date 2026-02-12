@@ -1,0 +1,59 @@
+06.03.01 - Hash Table
+Implement a HashTable.java file that allows a user to store and retrieve items using a key value 
+pair. The keys should be hash values of the values which will be objects.
+Requirements - 
+– Your table must operate in roughly O(1) for insert, delete and search operations.
+– You may choose the collision handling system that appeals to you (your options are linear, 
+  quadratic, buckets, etc.)
+- You must initialize your table as an array (what you store in the array is up to you) 
+  meaning you’ll need to decide on the size of your array. We can use this to see how many 
+  collisions we get. There’s no specific requirement for what size you choose, but your code 
+  should work if we decide to change the size later.
+- You should use the hashCode function already present in the String class. Note that this 
+  function can return negative values and may be larger than the size of your table so you 
+  should use the absolute value and also modulo the result by your table size.
+String key = "hello"; 
+int hashCode = key.hashCode();
+int arrayIndex = Math.abs(hashCode) % tableSize;
+– I’ve implemented a save and load function into your starter code that allows you to save and 
+  load your table into a file so you can store it for later (pretty useful if you want to 
+  actually use this as an application). I would recommend you take a look at that code briefly 
+  to see what’s going on there.
+
+–My code relies on an Iterator called keys. An Iterator is an object that can be used to loop 
+ over data structures. It is an interface that requires the following be implemented:
+
+default void    forEachRemaining(Consumer<? super E> action)
+    Performs the given action for each remaining element until all elements have been processed or 
+    the action throws an exception.
+
+boolean     hasNext()
+    Returns true if the iteration has more elements.
+
+E       next()
+    Returns the next element in the iteration.
+
+default void    remove()
+    Removes from the underlying collection the last element returned by this iterator 
+    (optional operation).
+
+
+You will have to implement all of these although you may simply have “forEachRemaining” and 
+“remove” throw an error if they are called since we won’t have a use for them in this project.
+
+What is actually scored:
+– You’ve implemented your table as an ARRAY not an ArrayList or something else that takes up 
+  more space and requires more than O(1) to access/search.
+- public void put(String key, Object value) puts an item into the hashtable. If there are two 
+  items with exactly the same key the old one should be replaced with the new one.
+- public String get(String key) find an element with the specified key in the table and return 
+  it’s value 
+- public String remove(String key) remove the element with the specified key, if none exist 
+  return null, otherwise return the value removed.
+– public Iterator keys() This iterator should be able to retrieve the next key in your hashtable.
+  Note that specifically this part of your program is not going to be O(1) while the above 
+  should be relatively close to it. That means you SHOULD NOT use the iterator inside the above 
+  methods, it should only be used for the save and load functions already provided as well as 
+  the print function described below.
+- public void print() - use the iterator to iterate through the hashTable and System.out.println 
+  all the key value pairs. Each key value pair should go on it’s own line.
