@@ -31,8 +31,6 @@ public class HashTable {
 	
     }
     
-
-
 	/**
 	 * Loads this HashTable from a file named "Lookup.dat".
 	 */
