@@ -3,13 +3,16 @@ import java.util.*;
 import java.io.*;
 
 public class HashTable {
-    int size;
-    String[] keys = new String[size];
-    Object[] values = new Object[size];
+    int size = 100;
+
+    ArrayList<Payload>[] table = new ArrayList[size];
     //Methods you have to supply:
 
-    public void put(String key, Object value) {
-        int i = key.hashCode();
+    public void put(Payload p) {
+        int i = (p.key.hashCode() % size);
+        //NOW regardless of a collision, we add it into this box, so any that are there are 
+        //bundled!
+        table[i].add(p);
     }
 
     public Object get(String key) {
@@ -62,7 +65,7 @@ public class HashTable {
                     System.out.println("Error in input file");
                     System.exit(1);
                 }
-                put(key, value);
+                put(new Payload(key, value));
             }
         }
         catch (IOException e) {
