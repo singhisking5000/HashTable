@@ -1,5 +1,8 @@
 
 import java.util.*;
+
+import javax.swing.text.AttributeSet;
+
 import java.io.*;
 
 public class HashTable {
@@ -16,12 +19,32 @@ public class HashTable {
     }
 
     public Object get(String key) {
-        return null;
+        //Hashcode the key to go straight to the point in storage
+        int i = key.hashCode();
+        for (Payload p : table[i])
+        {
+            if(p.key.equals(key))
+            {
+                return p;
+            }
+        }
+        return false;
     }
 
     public String remove(String key){
-        return null;
+        int i = key.hashCode();
+        for (Payload p : table[i])
+        {
+            if(p.key.equals(key))
+            {
+                String temp = p.key;
+                table[i].remove(p);
+                return temp;
+            }
+        }
+        return "ERROR: Object not found";
     }
+
 
     public Iterator keys() {
         return null;
@@ -31,6 +54,40 @@ public class HashTable {
 	
     }
     
+    private class It implements Iterator
+    {
+        int i = 0;
+        int j = 0;
+
+        @Override
+        public boolean hasNext() {
+            if(table[i + 1].isEmpty())
+            {
+                j = 0;
+                while(table[i])
+                {
+
+                }
+            } else {
+                if (condition) {
+                    
+                }
+            }
+            
+            // TODO Auto-generated method stub
+            // throw new UnsupportedOperationException("Unimplemented method 'hasNext'");
+        }
+
+        @Override
+        public Object next() {
+            
+            return 
+            // throw new UnsupportedOperationException("Unimplemented method 'next'");
+        }
+        
+        @Override
+    }
+
 	/**
 	 * Loads this HashTable from a file named "Lookup.dat".
 	 */
