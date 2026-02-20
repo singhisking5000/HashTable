@@ -54,38 +54,49 @@ public class HashTable {
 	
     }
     
-    private class It implements Iterator
+    // COMPLETE THIS ITERATOR BEFORE PROCEEDING
+    private class Iter implements Iterator
     {
-        int i = 0;
-        int j = 0;
+        // our position
+        // y will ALWAYS be zero, unless we find a spot with collision
+        int x = 0;
+        int y = 0;
+        // now find our starting position
+        public Iter ()
+        {
+            //Find the first spot in our hashtable thats occupied
+            while(table[x].isEmpty())
+            {
+                x += 1;
+            }
+        }
 
         @Override
         public boolean hasNext() {
-            if(table[i + 1].isEmpty())
+            //If there is more in our collumn, go there
+            if(y + 1 < table[x].size())
             {
-                j = 0;
-                while(table[i])
+                return true;
+            } else 
+            {
+                // If we are done here, move on to the next one while in bount
+                while(table[x + 1].isEmpty() && (x + 1) < size)
                 {
-
-                }
-            } else {
-                if (condition) {
-                    
+                    x += 1;
                 }
             }
             
+            
             // TODO Auto-generated method stub
-            // throw new UnsupportedOperationException("Unimplemented method 'hasNext'");
+            throw new UnsupportedOperationException("Unimplemented method 'hasNext'");
         }
 
         @Override
         public Object next() {
             
-            return 
-            // throw new UnsupportedOperationException("Unimplemented method 'next'");
+            throw new UnsupportedOperationException("Unimplemented method 'next'");
         }
-        
-        @Override
+        // do a remove too
     }
 
 	/**
