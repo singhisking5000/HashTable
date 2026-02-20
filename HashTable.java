@@ -13,14 +13,19 @@ public class HashTable {
 
     public void put(Payload p) {
         int i = (p.key.hashCode() % size);
-        //NOW regardless of a collision, we add it into this box, so any that are there are 
-        //bundled!
+        if(table[i]== null){
+            table[i] = new ArrayList<Payload>();
+        }
         table[i].add(p);
     }
 
     public Object get(String key) {
         //Hashcode the key to go straight to the point in storage
-        int i = key.hashCode();
+        int i = key.hashCode() % size;
+        if (table[i] == null)
+        {
+            return null;
+        }
         for (Payload p : table[i])
         {
             if(p.key.equals(key))
@@ -28,7 +33,7 @@ public class HashTable {
                 return p;
             }
         }
-        return false;
+        return null;
     }
 
     public String remove(String key){
@@ -47,7 +52,7 @@ public class HashTable {
 
 
     public Iterator keys() {
-        return null;
+        return new Iter();
     }
 
     public void print(){
@@ -61,12 +66,13 @@ public class HashTable {
         // y will ALWAYS be zero, unless we find a spot with collision
         int x = 0;
         int y = 0;
+        Payload prev; // <------ TO BE CONTINUED
 
         // now find our starting position when we create an iterator
         public Iter ()
         {
             //Is our occupied spot empty?
-            while(table[x].isEmpty() && (x + 1) < size)
+            while(table[x] == null && table[x].isEmpty() && (x + 1) < size)
             {
                 // find when its nOT to start :)
                 x++;
@@ -76,7 +82,7 @@ public class HashTable {
         @Override
         public boolean hasNext() {
             //Is there a next item with us?
-            if(y + 1 < table[x].size())
+            if(table[x] != null && y + 1 < table[x].size())
             {
                 return true;
             } else 
@@ -84,12 +90,12 @@ public class HashTable {
                 //If we are done with the current array, find the next 
                 //        if the next one is empty, we go to it
                 int fx = x; // to not alter our actual position, we use this future x to check
-                while(table[fx].isEmpty() && fx < size - 1)
+                while(table[fx] == null && table[fx].isEmpty() && fx < size - 1)
                 {
                     fx++;
                 }
                 // NOW we stop if we hit a none empty array OR we reached the end, with still nothing good
-                if(table[fx].isEmpty())
+                if(table[fx] == null && table[fx].isEmpty())
                 {
                     return false;
                 } else {
@@ -98,13 +104,12 @@ public class HashTable {
             }
         }
 
-
         @Override
         public Object next() {
             if(hasNext())
             {
                 //Is there a next item with us?
-                if(y + 1 < table[x].size())
+                if(table[x] != null && y + 1 < table[x].size())
                 {
                     y++;
                     return table[x].get(y);
@@ -114,12 +119,12 @@ public class HashTable {
                     y = 0;
                     //If we are done with the current array, find the next 
                     //        if the next one is empty, we go to it
-                    while(table[x].isEmpty() && x < size - 1)
+                    while(table[x] == null && table[x].isEmpty() && x < size - 1)
                     {
                         x++;
                     }
                     // NOW we stop if we hit a none empty array OR we reached the end, with still nothing good
-                    if(table[x].isEmpty())
+                    if(table[x] == null && table[x].isEmpty())
                     {
                         return null;
                     } else {
@@ -127,7 +132,6 @@ public class HashTable {
                     }
                 }
             }
-
             return null;
         }
 
