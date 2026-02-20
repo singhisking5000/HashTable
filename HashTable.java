@@ -61,28 +61,36 @@ public class HashTable {
         // y will ALWAYS be zero, unless we find a spot with collision
         int x = 0;
         int y = 0;
-        // now find our starting position
+
+        // now find our starting position when we create an iterator
         public Iter ()
         {
-            //Find the first spot in our hashtable thats occupied
-            while(table[x].isEmpty())
+            //Is our occupied spot empty?
+            while(table[x].isEmpty() && (x + 1) < size)
             {
+                // find when its nOT to start :)
                 x += 1;
             }
         }
 
         @Override
         public boolean hasNext() {
-            //If there is more in our collumn, go there
+            //Is there a next item with us?
             if(y + 1 < table[x].size())
             {
                 return true;
             } else 
             {
-                // If we are done here, move on to the next one while in bount
-                while(table[x + 1].isEmpty() && (x + 1) < size)
+                //If we are done with the current array, find the next 
+                //        if the next one is empty, we go to it
+                while ((x + 1) < size)
                 {
-                    x += 1;
+                    if(table[x + 1].isEmpty())
+                    {
+                        x++;
+                    } else {
+                        return true;
+                    }
                 }
             }
             
