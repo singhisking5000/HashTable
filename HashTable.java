@@ -69,7 +69,7 @@ public class HashTable {
             while(table[x].isEmpty() && (x + 1) < size)
             {
                 // find when its nOT to start :)
-                x += 1;
+                x++;
             }
         }
 
@@ -83,28 +83,58 @@ public class HashTable {
             {
                 //If we are done with the current array, find the next 
                 //        if the next one is empty, we go to it
-                while ((x + 1) < size)
+                int fx = x; // to not alter our actual position, we use this future x to check
+                while(table[fx].isEmpty() && fx < size - 1)
                 {
-                    if(table[x + 1].isEmpty())
-                    {
-                        x++;
-                    } else {
-                        return true;
-                    }
+                    fx++;
+                }
+                // NOW we stop if we hit a none empty array OR we reached the end, with still nothing good
+                if(table[fx].isEmpty())
+                {
+                    return false;
+                } else {
+                    return true;
                 }
             }
-            
-            
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'hasNext'");
         }
+
 
         @Override
         public Object next() {
-            
-            throw new UnsupportedOperationException("Unimplemented method 'next'");
+            if(hasNext())
+            {
+                //Is there a next item with us?
+                if(y + 1 < table[x].size())
+                {
+                    y++;
+                    return table[x].get(y);
+                } else 
+                {
+                    // Reset y because were not in the same arraylist anymore
+                    y = 0;
+                    //If we are done with the current array, find the next 
+                    //        if the next one is empty, we go to it
+                    while(table[x].isEmpty() && x < size - 1)
+                    {
+                        x++;
+                    }
+                    // NOW we stop if we hit a none empty array OR we reached the end, with still nothing good
+                    if(table[x].isEmpty())
+                    {
+                        return null;
+                    } else {
+                        return table[x].get(y);
+                    }
+                }
+            }
+
+            return null;
         }
-        // do a remove too
+
+        public void remove()
+        {
+            // Complete this function
+        }
     }
 
 	/**
