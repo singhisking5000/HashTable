@@ -24,7 +24,7 @@ public class HashTable {
         int i = key.hashCode() % size;
         if (table[i] == null)
         {
-            return null;
+            return new Payload("No Item found", "No Item Found");
         }
         for (Payload p : table[i])
         {
@@ -33,18 +33,18 @@ public class HashTable {
                 return p;
             }
         }
-        return null;
+        return new Payload("No Item found", "No Item Found");
     }
 
     public String remove(String key){
-        int i = key.hashCode();
+        int i = key.hashCode() % size;
         for (Payload p : table[i])
         {
             if(p.key.equals(key))
             {
-                String temp = p.key;
+                Payload temp = p;
                 table[i].remove(p);
-                return temp;
+                return "Item ID: " + temp.key + " was removed from the map";
             }
         }
         return "ERROR: Object not found";
@@ -56,7 +56,17 @@ public class HashTable {
     }
 
     public void print(){
-	
+        String toPrint = "";
+        Iterator i = keys();
+
+
+        while (i.hasNext())
+        {
+            toPrint += i.next();
+        }
+
+        System.out.println(toPrint + " <---- RESULT");
+        // infinite loop here somehwere
     }
     
     // COMPLETE THIS ITERATOR BEFORE PROCEEDING
@@ -66,16 +76,20 @@ public class HashTable {
         // y will ALWAYS be zero, unless we find a spot with collision
         int x = 0;
         int y = 0;
-        Payload prev; // <------ TO BE CONTINUED
+        Payload prev = null; // <------ TO BE CONTINUED
 
         // now find our starting position when we create an iterator
         public Iter ()
         {
             //Is our occupied spot empty?
-            while(table[x] == null && table[x].isEmpty() && (x + 1) < size)
+            // CAUSING NULL POINTER BELOW VVVVVVVVVVVVVVVV
+            while((x + 1) < size)
             {
+                if(table[x] == null || table[x].isEmpty())
+                {
+                    x++;
+                }
                 // find when its nOT to start :)
-                x++;
             }
         }
 
@@ -108,6 +122,8 @@ public class HashTable {
         public Object next() {
             if(hasNext())
             {
+                // If we have a next, we gotta remember our current...
+                prev = table[x].get(y);
                 //Is there a next item with us?
                 if(table[x] != null && y + 1 < table[x].size())
                 {
@@ -137,7 +153,14 @@ public class HashTable {
 
         public void remove()
         {
-            // Complete this function
+            int i = prev.key.hashCode();
+            for (Payload p : table[i])
+            {
+                if(p.key.equals(prev.key))
+                {
+                    table[i].remove(p);
+                }
+            }
         }
     }
 
