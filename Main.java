@@ -10,6 +10,7 @@ public class Main
         System.out.println(((Payload)map.get("17824")).value);
         System.out.println(map.remove("18231"));
         System.out.println(((Payload)map.get("748312")).value);
+        System.out.println("We loop when we print");
         map.print();
         System.out.println("Just chekcing we finish and dont get any loops!");
     }

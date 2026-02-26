@@ -51,18 +51,29 @@ public class HashTable {
     }
 
 
-    public Iterator keys() {
+    public Iter keys() {
         return new Iter();
     }
 
     public void print(){
         String toPrint = "";
-        Iterator i = keys();
-
+        
+        Iter i = keys();
+        //System.out.println("There is an error below");
+        System.out.println(table[i.x].get(i.y).key + " at index " + i.x);
 
         while (i.hasNext())
         {
-            toPrint += i.next();
+            /*
+            
+                THE VALUE OF X IS BEING RESET SOMEHOW, has next works as intended, but going to the next is not working
+            
+            */
+            System.out.println(i);
+            // something is wrong with .next, as we are not moving
+            Payload passed = i.next();
+            toPrint += "(K: " + passed.key + ", V: " + passed.value + ") ";
+            //System.out.println(toPrint);
         }
 
         System.out.println(toPrint + " <---- RESULT");
@@ -70,13 +81,13 @@ public class HashTable {
     }
     
     // COMPLETE THIS ITERATOR BEFORE PROCEEDING
-    private class Iter implements Iterator
+    private class Iter implements Iterator<Payload>
     {
         // our position
         // y will ALWAYS be zero, unless we find a spot with collision
-        int x = 0;
-        int y = 0;
-        Payload prev = null; // <------ TO BE CONTINUED
+        public int x = 0;
+        public int y = 0;
+        private Payload prev = null; // <------ TO BE CONTINUED
 
         // now find our starting position when we create an iterator
         public Iter ()
@@ -88,8 +99,10 @@ public class HashTable {
                 if(table[x] == null || table[x].isEmpty())
                 {
                     x++;
+                } else 
+                {
+                    break;
                 }
-                // find when its nOT to start :)
             }
         }
 
@@ -103,13 +116,13 @@ public class HashTable {
             {
                 //If we are done with the current array, find the next 
                 //        if the next one is empty, we go to it
-                int fx = x; // to not alter our actual position, we use this future x to check
-                while(table[fx] == null && table[fx].isEmpty() && fx < size - 1)
+                int fx = x + 1; // to not alter our actual position, we use this future x to check
+                while(((table[fx] == null) || (table[fx].isEmpty())) && fx < size - 1)
                 {
                     fx++;
                 }
                 // NOW we stop if we hit a none empty array OR we reached the end, with still nothing good
-                if(table[fx] == null && table[fx].isEmpty())
+                if(table[fx] == null || table[fx].isEmpty())
                 {
                     return false;
                 } else {
@@ -119,7 +132,7 @@ public class HashTable {
         }
 
         @Override
-        public Object next() {
+        public Payload next() {
             if(hasNext())
             {
                 // If we have a next, we gotta remember our current...
@@ -135,12 +148,13 @@ public class HashTable {
                     y = 0;
                     //If we are done with the current array, find the next 
                     //        if the next one is empty, we go to it
-                    while(table[x] == null && table[x].isEmpty() && x < size - 1)
+                    x++;
+                    while((table[x] == null || table[x].isEmpty()) && x < size - 1)
                     {
                         x++;
                     }
                     // NOW we stop if we hit a none empty array OR we reached the end, with still nothing good
-                    if(table[x] == null && table[x].isEmpty())
+                    if(table[x] == null || table[x].isEmpty())
                     {
                         return null;
                     } else {
@@ -148,6 +162,7 @@ public class HashTable {
                     }
                 }
             }
+
             return null;
         }
 
