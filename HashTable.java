@@ -7,6 +7,7 @@ import java.io.*;
 
 public class HashTable {
     int size = 100;
+    int items = 0;
 
     ArrayList<Payload>[] table = new ArrayList[size];
     //Methods you have to supply:
@@ -17,6 +18,22 @@ public class HashTable {
             table[i] = new ArrayList<Payload>();
         }
         table[i].add(p);
+        items++;
+        if((items / size) > (2/3))
+        {
+            doubleSize()
+        }
+    }
+
+    public void doubleSize()
+    {
+        //To take a snapshot of all of the items
+        ArrayList<Payload>[] old = table;
+        
+
+        // Double the size
+        size *= 2;
+        table = new ArrayList[size];
     }
 
     public Object get(String key) {
@@ -44,6 +61,7 @@ public class HashTable {
             {
                 Payload temp = p;
                 table[i].remove(p);
+                items--;
                 return "Item ID: " + temp.key + " was removed from the map";
             }
         }
