@@ -59,25 +59,16 @@ public class HashTable {
         String toPrint = "";
         
         Iter i = keys();
-        //System.out.println("There is an error below");
-        System.out.println(table[i.x].get(i.y).key + " at index " + i.x);
+        //System.out.println(table[i.x].get(i.y).key + " at index " + i.x);
 
         while (i.hasNext())
         {
-            /*
-            
-                THE VALUE OF X IS BEING RESET SOMEHOW, has next works as intended, but going to the next is not working
-            
-            */
-            System.out.println(i);
-            // something is wrong with .next, as we are not moving
             Payload passed = i.next();
             toPrint += "(K: " + passed.key + ", V: " + passed.value + ") ";
             //System.out.println(toPrint);
         }
 
         System.out.println(toPrint + " <---- RESULT");
-        // infinite loop here somehwere
     }
     
     // COMPLETE THIS ITERATOR BEFORE PROCEEDING
