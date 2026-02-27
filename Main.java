@@ -12,7 +12,7 @@ public class Main
         map.put(new Payload("Aa", "Item 1"));
         map.put(new Payload("BB", "Item 2"));
         System.out.println(((Payload)map.get("17824")).value);
-        System.out.println(map.remove("18231"));
+        //System.out.println(map.remove("18231"));
         System.out.println(((Payload)map.get("748312")).value);
         System.out.println("We loop when we print");
         map.print();

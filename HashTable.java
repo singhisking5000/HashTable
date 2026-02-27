@@ -21,19 +21,26 @@ public class HashTable {
         items++;
         if((items / size) > (2/3))
         {
-            doubleSize()
+            doubleSize();
         }
     }
 
     public void doubleSize()
     {
         //To take a snapshot of all of the items
-        ArrayList<Payload>[] old = table;
+        size *= 2;
+        ArrayList<Payload>[] updatedTable = new ArrayList[size];
+
+        Iter items = this.keys();
         
+        while(items.hasNext())
+        {
+            
+        }
+
 
         // Double the size
-        size *= 2;
-        table = new ArrayList[size];
+        table = updatedTable;
     }
 
     public Object get(String key) {
