@@ -6,6 +6,7 @@ import javax.swing.text.AttributeSet;
 import java.io.*;
 
 public class HashTable {
+    // 10 causes errors, but not 9
     int size = 100;
     int items = 0;
 
@@ -19,8 +20,10 @@ public class HashTable {
         }
         table[i].add(p);
         items++;
-        if((items / size) > (2/3))
+        // If we exceed 2/3 fullness, we need to double size
+        if((items / size) > (1/3))
         {
+            System.out.println("Increased the size x2!");
             doubleSize();
         }
     }
@@ -31,12 +34,25 @@ public class HashTable {
         size *= 2;
         ArrayList<Payload>[] updatedTable = new ArrayList[size];
 
-        Iter items = this.keys();
+        Iter iterItems = this.keys();
         
-        while(items.hasNext())
+        while(iterItems.hasNext())
         {
-            
+            Payload p = iterItems.next();
+            int i = (p.key.hashCode() % size);
+            if (updatedTable[i] == null)
+            {
+                updatedTable[i] = new ArrayList<Payload>();
+            }
+            updatedTable[i].add(p);
         }
+
+        Payload p = iterItems.next();
+        int i = (p.key.hashCode() % size);
+        if (updatedTable[i] == null) {
+            updatedTable[i] = new ArrayList<Payload>();
+        }
+        updatedTable[i].add(p);
 
 
         // Double the size
@@ -84,18 +100,23 @@ public class HashTable {
         String toPrint = "";
         
         Iter i = keys();
-        //System.out.println(table[i.x].get(i.y).key + " at index " + i.x);
+        // System.out.println(table[i.x].get(i.y).key + " at index " + i.x);
 
+        // get every element
         while (i.hasNext())
         {
             Payload passed = i.next();
             toPrint += "(K: " + passed.key + ", V: " + passed.value + ") ";
-            //System.out.println(toPrint);
         }
+        Payload passed = i.next();
+        toPrint += "(K: " + passed.key + ", V: " + passed.value + ") ";
 
         System.out.println(toPrint + " <---- RESULT");
     }
     
+
+
+
     // COMPLETE THIS ITERATOR BEFORE PROCEEDING
     private class Iter implements Iterator<Payload>
     {
@@ -103,13 +124,15 @@ public class HashTable {
         // y will ALWAYS be zero, unless we find a spot with collision
         public int x = 0;
         public int y = 0;
-        private Payload prev = null; // <------ TO BE CONTINUED
+        private Payload prev = null;
+        
+        // Have we reached the end, we need to do something different
+        private boolean last = false;
 
         // now find our starting position when we create an iterator
         public Iter ()
         {
             //Is our occupied spot empty?
-            // CAUSING NULL POINTER BELOW VVVVVVVVVVVVVVVV
             while((x + 1) < size)
             {
                 if(table[x] == null || table[x].isEmpty())
@@ -122,6 +145,8 @@ public class HashTable {
             }
         }
 
+
+        // CAUSING NULL POINTERS, 
         @Override
         public boolean hasNext() {
             //Is there a next item with us?
@@ -133,11 +158,14 @@ public class HashTable {
                 //If we are done with the current array, find the next 
                 //        if the next one is empty, we go to it
                 int fx = x + 1; // to not alter our actual position, we use this future x to check
+                //Keep moving right if there is empty spots, STAY IN BOUNDS
                 while(((table[fx] == null) || (table[fx].isEmpty())) && fx < size - 1)
                 {
                     fx++;
                 }
+
                 // NOW we stop if we hit a none empty array OR we reached the end, with still nothing good
+                // Are we at an empty slot?
                 if(table[fx] == null || table[fx].isEmpty())
                 {
                     return false;
@@ -156,10 +184,12 @@ public class HashTable {
                 //Is there a next item with us?
                 if(table[x] != null && y + 1 < table[x].size())
                 {
+                    Payload temp = table[x].get(y);
                     y++;
-                    return table[x].get(y);
+                    return temp;
                 } else 
                 {
+                    Payload temp = table[x].get(y);
                     // Reset y because were not in the same arraylist anymore
                     y = 0;
                     //If we are done with the current array, find the next 
@@ -174,12 +204,13 @@ public class HashTable {
                     {
                         return null;
                     } else {
-                        return table[x].get(y);
+                        return temp;
                     }
                 }
             }
-
-            return null;
+            // we should stop by the last slot
+            // If we are still in bound, move there and 
+            return table[x].get(y);
         }
 
         public void remove()
